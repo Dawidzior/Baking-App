@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="exo_player_margin">0dp</dimen>
+    <dimen name="recipient_fragment_width">400dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="default_elevation">8dp</dimen>
+    <dimen name="default_corner_radius">4dp</dimen>
+    <dimen name="main_item_height">200dp</dimen>
+    <dimen name="main_item_text_padding">8dp</dimen>
+    <dimen name="main_item_text_size">32sp</dimen>
+</resources>

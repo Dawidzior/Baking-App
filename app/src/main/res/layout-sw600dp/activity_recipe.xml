@@ -1,0 +1,18 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <fragment
+        android:id="@+id/detail_recipient_fragment"
+        android:name="dawidzior.bakingapp.fragment.RecipeFragment"
+        android:layout_width="@dimen/recipient_fragment_width"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:id="@+id/step_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
