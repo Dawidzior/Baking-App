@@ -16,7 +16,8 @@ Use Fragments to create a responsive design that works on phones and tablets.
 
 # Future personal TODO:
 1. Retrofit - DONE
-2. RxJava/RxAndroid
-3. LiveData
-4. Architecture components
+2. More tests
+3. RxJava/RxAndroid
+4. LiveData
+5. Architecture components
 
