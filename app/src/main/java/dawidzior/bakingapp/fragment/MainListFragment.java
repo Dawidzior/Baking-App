@@ -1,5 +1,8 @@
 package dawidzior.bakingapp.fragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,26 +49,33 @@ public class MainListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(RECIPE_URL)
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
-                .build();
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni != null && ni.isConnected()) {
+            Retrofit retrofit = new Retrofit.Builder().baseUrl(RECIPE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                    .build();
 
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
+            RetrofitService retrofitService = retrofit.create(RetrofitService.class);
 
-        Call<List<Recipe>> retrofitResultCallback = retrofitService.getRecipes();
-        retrofitResultCallback.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                recipeList.addAll(response.body());
+            Call<List<Recipe>> retrofitResultCallback = retrofitService.getRecipes();
+            retrofitResultCallback.enqueue(new Callback<List<Recipe>>() {
+                @Override
+                public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                    recipeList.addAll(response.body());
 
-                //TODO Convert to Livedata
-                recipeListView.setAdapter(new MainListAdapter(getContext(), recipeList));
-            }
+                    //TODO Convert to Livedata
+                    recipeListView.setAdapter(new MainListAdapter(getContext(), recipeList));
+                }
 
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error getting data!", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                    Toast.makeText(getActivity(), R.string.download_error, Toast.LENGTH_LONG).show();
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), R.string.no_internet, Toast.LENGTH_LONG).show();
+        }
     }
 }
