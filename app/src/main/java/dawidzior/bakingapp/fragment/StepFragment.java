@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -20,6 +21,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
@@ -44,8 +46,13 @@ public class StepFragment extends Fragment {
 
     private String description;
 
+    private String thumbnailUrl;
+
     @BindView(R.id.player_view)
     PlayerView playerView;
+
+    @BindView(R.id.thumbnail_image)
+    ImageView thumbnailImage;
 
     @BindView(R.id.description_view)
     TextView descriptionView;
@@ -67,6 +74,7 @@ public class StepFragment extends Fragment {
             step = Parcels.unwrap(savedInstanceState.getParcelable(STEP_ARGUMENT));
         }
         videoUrl = step.getVideoURL();
+        thumbnailUrl = step.getThumbnailUrl();
         description = step.getDescription();
         getActivity().setTitle(step.getShortDescription());
     }
@@ -119,6 +127,8 @@ public class StepFragment extends Fragment {
             playerView.setVisibility(View.GONE);
         }
 
+        if (playerView.getVisibility() == View.GONE && thumbnailUrl != null && !TextUtils.isEmpty(thumbnailUrl))
+            Picasso.with(getActivity()).load(thumbnailUrl).into(thumbnailImage);
         descriptionView.setText(description);
     }
 

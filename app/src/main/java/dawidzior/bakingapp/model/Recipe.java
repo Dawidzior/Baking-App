@@ -15,4 +15,6 @@ public class Recipe {
     List<Ingredient> ingredients;
 
     List<Step> steps;
+
+    String image;
 }

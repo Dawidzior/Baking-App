@@ -15,4 +15,6 @@ public class Step {
     String description;
 
     String videoURL;
+
+    String thumbnailUrl;
 }

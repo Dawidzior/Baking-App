@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
 
     private Context context;
 
+    private String imageUrl;
+
     public MainListAdapter(Context context, List<Recipe> items) {
         this.context = context;
         recipes = items;
@@ -45,8 +48,15 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.recipeName.setText(recipes.get(position).getName());
 
+        String recipeImageUrl = recipes.get(position).getImage();
+        if (recipeImageUrl != null && !TextUtils.isEmpty(recipeImageUrl)) {
+            imageUrl = recipeImageUrl;
+        } else {
+            imageUrl = IngredientsUtil.getMainRecipeImageUrl(recipes.get(position).getName());
+        }
+
         //NoFade() to avoid ugly placeholder stretching.
-        Picasso.with(context).load(IngredientsUtil.getMainRecipeImageUrl(recipes.get(position).getName()))
+        Picasso.with(context).load(imageUrl)
                 .placeholder(R.drawable.ic_restaurant_black).error(R.drawable.ic_error_black).fit().centerCrop()
                 .noFade()
                 .into(holder.recipeImage);
