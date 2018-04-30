@@ -16,14 +16,17 @@
         <activity android:name=".activity.MainListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.RecipeActivity"/>
+        <activity
+            android:name=".activity.RecipeActivity"
+            android:parentActivityName=".activity.MainListActivity"/>
 
-        <activity android:name=".activity.StepActivity"/>
+        <activity
+            android:name=".activity.StepActivity"
+            android:parentActivityName=".activity.RecipeActivity"/>
 
         <receiver android:name=".widget.BakingAppWidgetProvider">
             <intent-filter>

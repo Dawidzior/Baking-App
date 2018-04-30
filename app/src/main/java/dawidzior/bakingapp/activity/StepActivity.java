@@ -32,6 +32,7 @@ public class StepActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
         ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         steps = Parcels.unwrap(getIntent().getParcelableExtra(StepFragment.STEPS_LIST));
         stepNumber = getIntent().getIntExtra(StepFragment.STEP_NUMBER, 0);

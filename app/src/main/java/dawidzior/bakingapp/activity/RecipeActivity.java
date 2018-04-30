@@ -14,6 +14,7 @@ public class RecipeActivity extends AppCompatActivity implements StepsAdapter.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
