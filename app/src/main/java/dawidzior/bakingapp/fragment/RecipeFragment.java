@@ -1,6 +1,7 @@
 package dawidzior.bakingapp.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
@@ -22,6 +23,8 @@ import lombok.Getter;
 public class RecipeFragment extends Fragment {
 
     public static final String RECIPE_ARGUMENT = "RECIPE_ARGUMENT";
+    public static final String INGREDIENT_LIST_STATE = "INGREDIENT_LIST_STATE";
+    public static final String STEPS_LIST_STATE = "STEPS_LIST_STATE";
 
     @BindView(R.id.nested_scroll_view)
     NestedScrollView nestedScrollView;
@@ -45,6 +48,7 @@ public class RecipeFragment extends Fragment {
         } else {
             recipe = Parcels.unwrap(savedInstanceState.getParcelable(RECIPE_ARGUMENT));
         }
+
         getActivity().setTitle(recipe.getName());
 
         stepsAdapter = new StepsAdapter(getContext(), recipe.getSteps());
@@ -63,5 +67,19 @@ public class RecipeFragment extends Fragment {
         nestedScrollView.setNestedScrollingEnabled(true);
         ingredientsListView.setAdapter(new IngredientsAdapter(recipe.getIngredients()));
         stepsListView.setAdapter(stepsAdapter);
+
+        if (savedInstanceState != null) {
+            ingredientsListView.getLayoutManager()
+                    .onRestoreInstanceState(savedInstanceState.getParcelable(INGREDIENT_LIST_STATE));
+            stepsListView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(STEPS_LIST_STATE));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(RECIPE_ARGUMENT, Parcels.wrap(recipe));
+        outState.putParcelable(INGREDIENT_LIST_STATE, ingredientsListView.getLayoutManager().onSaveInstanceState());
+        outState.putParcelable(STEPS_LIST_STATE, stepsListView.getLayoutManager().onSaveInstanceState());
+        super.onSaveInstanceState(outState);
     }
 }
