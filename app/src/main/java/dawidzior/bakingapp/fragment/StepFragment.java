@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -29,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dawidzior.bakingapp.R;
 import dawidzior.bakingapp.model.Step;
+import lombok.Getter;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
@@ -37,6 +39,8 @@ public class StepFragment extends Fragment {
     public static final String STEP_ARGUMENT = "STEP_ARGUMENT";
     public static final String STEPS_LIST = "STEPS_LIST";
     public static final String STEP_NUMBER = "STEP_NUMBER";
+    public static final String PLAYER_STATE = "PLAYER_STATE";
+    public static final String PLAYER_POSITION = "PLAYER_POSITION";
 
     private Step step;
 
@@ -47,6 +51,12 @@ public class StepFragment extends Fragment {
     private String description;
 
     private String thumbnailUrl;
+
+    @Getter
+    private boolean shouldAutoPlay = true;
+
+    @Getter
+    private long resumePosition;
 
     @BindView(R.id.player_view)
     PlayerView playerView;
@@ -68,11 +78,14 @@ public class StepFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            step = Parcels.unwrap(getArguments().getParcelable(STEP_ARGUMENT));
-        } else {
-            step = Parcels.unwrap(savedInstanceState.getParcelable(STEP_ARGUMENT));
+        step = Parcels.unwrap(getArguments().getParcelable(STEP_ARGUMENT));
+
+        //TODO savedInstanceState is overriden when newInstance() is called from StepActivity
+        if (savedInstanceState != null) {
+            shouldAutoPlay = savedInstanceState.getBoolean(PLAYER_STATE);
+            resumePosition = savedInstanceState.getLong(PLAYER_POSITION, C.TIME_UNSET);
         }
+
         videoUrl = step.getVideoURL();
         thumbnailUrl = step.getThumbnailUrl();
         description = step.getDescription();
@@ -83,7 +96,6 @@ public class StepFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_step, container, false);
         ButterKnife.bind(this, root);
-
 
         if (videoUrl != null && !TextUtils.isEmpty(videoUrl)) {
             playerView.setVisibility(View.VISIBLE);
@@ -118,9 +130,13 @@ public class StepFragment extends Fragment {
                             .Factory(dataSourceFactory)
                             .createMediaSource(Uri.parse(videoUrl));
                     simpleExoPlayer.prepare(mediaSource);
-                    simpleExoPlayer.setPlayWhenReady(true);
+                    simpleExoPlayer.setPlayWhenReady(shouldAutoPlay);
 
                     playerView.setPlayer(simpleExoPlayer);
+
+                    if (resumePosition != C.TIME_UNSET) {
+                        simpleExoPlayer.seekTo(0, resumePosition);
+                    }
                 }
             }
         } else {
@@ -139,14 +155,22 @@ public class StepFragment extends Fragment {
         //https://github.com/google/ExoPlayer/issues/3699
         playerView.setVisibility(View.GONE);
         if (simpleExoPlayer != null) {
+            shouldAutoPlay = simpleExoPlayer.getPlayWhenReady();
+            updateResumePosition();
             simpleExoPlayer.release();
             simpleExoPlayer = null;
         }
     }
 
+
+    private void updateResumePosition() {
+        resumePosition = Math.max(0, simpleExoPlayer.getContentPosition());
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable(STEP_ARGUMENT, Parcels.wrap(step));
+        outState.putBoolean(PLAYER_STATE, shouldAutoPlay);
+        outState.putLong(PLAYER_POSITION, resumePosition);
         super.onSaveInstanceState(outState);
     }
 }

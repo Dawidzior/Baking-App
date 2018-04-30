@@ -17,6 +17,8 @@ import dawidzior.bakingapp.model.Step;
 
 public class StepActivity extends AppCompatActivity {
 
+    private static final String STEP_FRAGMENT_TAG = "STEP_FRAGMENT_TAG";
+
     @BindView(R.id.previous_button)
     Button previousButton;
 
@@ -42,7 +44,7 @@ public class StepActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, StepFragment.newInstance(steps.get(stepNumber))).commit();
+                .replace(R.id.fragment_container, StepFragment.newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
 
         if (stepNumber == 0) previousButton.setEnabled(false);
         if (stepNumber == steps.size() - 1) nextButton.setEnabled(false);
@@ -52,7 +54,7 @@ public class StepActivity extends AppCompatActivity {
             public void onClick(View view) {
                 stepNumber--;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, StepFragment
-                        .newInstance(steps.get(stepNumber))).commit();
+                        .newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
 
                 if (stepNumber - 1 < 0) {
                     previousButton.setEnabled(false);
@@ -66,7 +68,7 @@ public class StepActivity extends AppCompatActivity {
             public void onClick(View view) {
                 stepNumber++;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, StepFragment
-                        .newInstance(steps.get(stepNumber))).commit();
+                        .newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
 
                 if (stepNumber + 1 > steps.size() - 1) {
                     nextButton.setEnabled(false);
