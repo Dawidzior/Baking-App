@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activity.MainListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,10 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.RecipeActivity"/>
+
         <activity android:name=".activity.StepActivity"/>
 
-        <receiver android:name=".BakingAppWidgetProvider">
+        <receiver android:name=".widget.BakingAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
@@ -31,6 +34,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_app_widget_provider_info"/>
         </receiver>
+
     </application>
 
 </manifest>

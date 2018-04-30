@@ -1,15 +1,13 @@
-<RelativeLayout
+<FrameLayout
     android:id="@+id/widget_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/recipe_image"
+    <TextView
+        android:id="@+id/widget_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_restaurant_black"
-        android:tint="@android:color/white"/>
+        style="@style/TextAppearance.AppCompat.Body1"/>
 
-</RelativeLayout>
+</FrameLayout>
