@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,22 +36,36 @@ public class MainListFragment extends Fragment {
 
     private static final String RECIPE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
 
+    private static final String RECIPE_LIST = "RECIPE_LIST";
+
     private List<Recipe> recipeList = new ArrayList<>();
 
     @BindView(R.id.recipe_list)
     RecyclerView recipeListView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_main_list, container, false);
-        ButterKnife.bind(this, root);
-        return root;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            recipeList = Parcels.unwrap(savedInstanceState.getParcelable(RECIPE_LIST));
+        }
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_main_list, container, false);
+        ButterKnife.bind(this, root);
 
+        if (recipeList.size() == 0)
+            loadRecipes();
+        else {
+            recipeListView.setAdapter(new MainListAdapter(getContext(), recipeList));
+        }
+
+        return root;
+    }
+
+    private void loadRecipes() {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         assert cm != null;
         NetworkInfo ni = cm.getActiveNetworkInfo();
@@ -77,5 +94,11 @@ public class MainListFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), R.string.no_internet, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(RECIPE_LIST, Parcels.wrap(recipeList));
     }
 }
