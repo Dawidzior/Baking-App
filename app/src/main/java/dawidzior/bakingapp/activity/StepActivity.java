@@ -43,12 +43,9 @@ public class StepActivity extends AppCompatActivity {
         } else {
             stepNumber = getIntent().getIntExtra(StepFragment.STEP_NUMBER, 0);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        replaceFragment();
+        if (savedInstanceState == null) {
+            replaceFragment();
+        }
 
         if (stepNumber == 0) previousButton.setEnabled(false);
         if (stepNumber == steps.size() - 1) nextButton.setEnabled(false);

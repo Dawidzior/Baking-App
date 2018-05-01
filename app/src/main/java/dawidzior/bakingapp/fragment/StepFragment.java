@@ -80,7 +80,6 @@ public class StepFragment extends Fragment {
         super.onCreate(savedInstanceState);
         step = Parcels.unwrap(getArguments().getParcelable(STEP_ARGUMENT));
 
-        //TODO savedInstanceState is overriden when newInstance() is called from StepActivity
         if (savedInstanceState != null) {
             shouldAutoPlay = savedInstanceState.getBoolean(PLAYER_STATE);
             resumePosition = savedInstanceState.getLong(PLAYER_POSITION, C.TIME_UNSET);
