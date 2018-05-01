@@ -43,8 +43,7 @@ public class StepActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, StepFragment.newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
+        replaceFragment();
 
         if (stepNumber == 0) previousButton.setEnabled(false);
         if (stepNumber == steps.size() - 1) nextButton.setEnabled(false);
@@ -53,8 +52,7 @@ public class StepActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stepNumber--;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, StepFragment
-                        .newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
+                replaceFragment();
 
                 if (stepNumber - 1 < 0) {
                     previousButton.setEnabled(false);
@@ -67,8 +65,7 @@ public class StepActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 stepNumber++;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, StepFragment
-                        .newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
+                replaceFragment();
 
                 if (stepNumber + 1 > steps.size() - 1) {
                     nextButton.setEnabled(false);
@@ -76,5 +73,10 @@ public class StepActivity extends AppCompatActivity {
                 previousButton.setEnabled(true);
             }
         });
+    }
+
+    private void replaceFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, StepFragment
+                .newInstance(steps.get(stepNumber)), STEP_FRAGMENT_TAG).commit();
     }
 }
