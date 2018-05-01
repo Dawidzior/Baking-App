@@ -18,6 +18,7 @@ import dawidzior.bakingapp.model.Step;
 public class StepActivity extends AppCompatActivity {
 
     private static final String STEP_FRAGMENT_TAG = "STEP_FRAGMENT_TAG";
+    private static final String STEP_NUMBER_KEY = "STEP_NUMBER_KEY";
 
     @BindView(R.id.previous_button)
     Button previousButton;
@@ -37,7 +38,11 @@ public class StepActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         steps = Parcels.unwrap(getIntent().getParcelableExtra(StepFragment.STEPS_LIST));
-        stepNumber = getIntent().getIntExtra(StepFragment.STEP_NUMBER, 0);
+        if (savedInstanceState != null) {
+            stepNumber = savedInstanceState.getInt(STEP_NUMBER_KEY);
+        } else {
+            stepNumber = getIntent().getIntExtra(StepFragment.STEP_NUMBER, 0);
+        }
     }
 
     @Override
@@ -73,6 +78,12 @@ public class StepActivity extends AppCompatActivity {
                 previousButton.setEnabled(true);
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STEP_NUMBER_KEY, stepNumber);
+        super.onSaveInstanceState(outState);
     }
 
     private void replaceFragment() {
