@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.MainListActivity">
+        <activity
+            android:name=".activity.MainListActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -22,10 +24,12 @@
 
         <activity
             android:name=".activity.RecipeActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".activity.MainListActivity"/>
 
         <activity
             android:name=".activity.StepActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".activity.RecipeActivity"/>
 
         <receiver android:name=".widget.BakingAppWidgetProvider">
