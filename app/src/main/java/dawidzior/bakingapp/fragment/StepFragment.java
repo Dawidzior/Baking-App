@@ -144,7 +144,7 @@ public class StepFragment extends Fragment {
         }
 
         if (playerView.getVisibility() == View.GONE && thumbnailUrl != null && !TextUtils.isEmpty(thumbnailUrl))
-            Picasso.with(getActivity()).load(thumbnailUrl).into(thumbnailImage);
+            Picasso.get().load(thumbnailUrl).into(thumbnailImage);
         descriptionView.setText(description);
     }
 

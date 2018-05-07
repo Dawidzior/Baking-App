@@ -56,7 +56,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
         }
 
         //NoFade() to avoid ugly placeholder stretching.
-        Picasso.with(context).load(imageUrl)
+        Picasso.get().load(imageUrl)
                 .placeholder(R.drawable.ic_restaurant_black).error(R.drawable.ic_error_black).fit().centerCrop()
                 .noFade()
                 .into(holder.recipeImage);
