@@ -41,7 +41,7 @@ dependencies {
 
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
 
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     testImplementation 'junit:junit:4.12'
 
