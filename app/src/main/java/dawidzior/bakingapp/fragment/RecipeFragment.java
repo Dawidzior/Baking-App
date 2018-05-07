@@ -25,6 +25,7 @@ public class RecipeFragment extends Fragment {
     public static final String RECIPE_ARGUMENT = "RECIPE_ARGUMENT";
     public static final String INGREDIENT_LIST_STATE = "INGREDIENT_LIST_STATE";
     public static final String STEPS_LIST_STATE = "STEPS_LIST_STATE";
+    public static final String SELECTED_STEP = "SELECTED_STEP";
 
     @BindView(R.id.nested_scroll_view)
     NestedScrollView nestedScrollView;
@@ -50,8 +51,6 @@ public class RecipeFragment extends Fragment {
         }
 
         getActivity().setTitle(recipe.getName());
-
-        stepsAdapter = new StepsAdapter(getContext(), recipe.getSteps());
     }
 
     @Override
@@ -66,12 +65,22 @@ public class RecipeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         nestedScrollView.setNestedScrollingEnabled(true);
         ingredientsListView.setAdapter(new IngredientsAdapter(recipe.getIngredients()));
+
+        stepsAdapter = new StepsAdapter(getContext(), recipe.getSteps());
         stepsListView.setAdapter(stepsAdapter);
 
         if (savedInstanceState != null) {
             ingredientsListView.getLayoutManager()
                     .onRestoreInstanceState(savedInstanceState.getParcelable(INGREDIENT_LIST_STATE));
             stepsListView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(STEPS_LIST_STATE));
+            if (getResources().getBoolean(R.bool.isTablet)) {
+                stepsAdapter.setSelectedStep(savedInstanceState.getInt(SELECTED_STEP));
+            }
+        } else {
+            if (getResources().getBoolean(R.bool.isTablet)) {
+                //First window run on tablet. Force choosing first step.
+                stepsAdapter.getListener().onStepListClick(stepsAdapter.getSteps().get(0));
+            }
         }
     }
 
@@ -80,6 +89,7 @@ public class RecipeFragment extends Fragment {
         outState.putParcelable(RECIPE_ARGUMENT, Parcels.wrap(recipe));
         outState.putParcelable(INGREDIENT_LIST_STATE, ingredientsListView.getLayoutManager().onSaveInstanceState());
         outState.putParcelable(STEPS_LIST_STATE, stepsListView.getLayoutManager().onSaveInstanceState());
+        if (getResources().getBoolean(R.bool.isTablet)) outState.putInt(SELECTED_STEP, stepsAdapter.getSelectedStep());
         super.onSaveInstanceState(outState);
     }
 }

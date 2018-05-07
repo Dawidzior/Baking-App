@@ -42,8 +42,6 @@ public class StepFragment extends Fragment {
     public static final String PLAYER_STATE = "PLAYER_STATE";
     public static final String PLAYER_POSITION = "PLAYER_POSITION";
 
-    private Step step;
-
     private SimpleExoPlayer simpleExoPlayer;
 
     private String videoUrl;
@@ -78,7 +76,7 @@ public class StepFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        step = Parcels.unwrap(getArguments().getParcelable(STEP_ARGUMENT));
+        Step step = Parcels.unwrap(getArguments().getParcelable(STEP_ARGUMENT));
 
         if (savedInstanceState != null) {
             shouldAutoPlay = savedInstanceState.getBoolean(PLAYER_STATE);
@@ -88,7 +86,10 @@ public class StepFragment extends Fragment {
         videoUrl = step.getVideoURL();
         thumbnailUrl = step.getThumbnailUrl();
         description = step.getDescription();
-        getActivity().setTitle(step.getShortDescription());
+
+        //If not tablet, override toolbar title with step name.
+        if (!getResources().getBoolean(R.bool.isTablet))
+            getActivity().setTitle(step.getShortDescription());
     }
 
     @Override

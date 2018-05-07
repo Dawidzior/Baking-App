@@ -24,25 +24,22 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
 
     private static final String DOT_SPACE = ". ";
 
-    private final List<Step> steps;
-
     private Context context;
+
+    @Getter
+    private final List<Step> steps;
 
     @Getter
     @Setter
     private int selectedStep = 0;
 
+    @Getter
     private OnItemSelectedListener listener;
 
     public StepsAdapter(Context context, List<Step> items) {
         this.context = context;
         steps = items;
         listener = (OnItemSelectedListener) context;
-
-        //Trigger showing first step fragment.
-        if (context.getResources().getBoolean(R.bool.isTablet) && listener != null) {
-            listener.onStepListClick(steps.get(0));
-        }
     }
 
     @NonNull
